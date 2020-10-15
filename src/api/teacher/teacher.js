@@ -1,0 +1,29 @@
+import request from "@/utils/request"
+
+const api_name = '/eduservice/edu-teacher'
+export default{
+
+    getTeacherListPage(pageNum,pageSize,teacherQuery){
+        return request({
+            url:`${api_name}/pageTeacherCondition/${pageNum}/${pageSize}`,
+            method:'post',
+            //data表示吧teacherQuery转换成json传递
+            data:teacherQuery
+        })
+    },
+
+    addTeacher(teacher){
+        return request({
+            url:`${api_name}/addTeacher`,
+            method:'post',
+            //data表示吧teacherQuery转换成json传递
+            data:teacher
+        })
+    },
+    removeById(teacherId) {
+        return request({
+            url: `${api_name}/deleteTeacher/${teacherId}`,
+            method: 'delete'
+        })
+    }
+}
