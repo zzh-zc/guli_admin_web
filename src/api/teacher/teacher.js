@@ -25,5 +25,18 @@ export default{
             url: `${api_name}/deleteTeacher/${teacherId}`,
             method: 'delete'
         })
+    },
+    getById(id) {
+        return request({
+            url: `${api_name}/${id}`,
+            method: 'get'
+        })
+    },
+    updateById(teacher) {
+        return request({
+            url: `${api_name}/${teacher.id}`,
+            method: 'put',
+            data: teacher
+        })
     }
 }
