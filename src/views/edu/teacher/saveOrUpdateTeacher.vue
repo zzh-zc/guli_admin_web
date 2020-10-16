@@ -61,12 +61,22 @@ export default {
   },
   created() {
     console.log("created");
-    if (this.$route.params && this.$route.params.id) {
-      const id = this.$route.params.id;
-      this.fetchDataById(id);
+    this.init();
+  },
+  watch: {
+    $route(to, from) {
+      this.init();
     }
   },
   methods: {
+    init() {
+      if (this.$route.params && this.$route.params.id) {
+        const id = this.$route.params.id;
+        this.fetchDataById(id);
+      } else {
+        this.teacher = {};
+      }
+    },
     saveOrUpdate() {
       this.saveBtnDisabled = true;
       if (!this.teacher.id) {
