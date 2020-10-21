@@ -50,7 +50,7 @@ export const constantRouterMap = [
         meta: { title: '讲师列表', icon: 'table' }
       },
       {
-        path: 'saveOrUpdateTeache',
+        path: 'saveOrUpdateTeacher',
         name: '添加讲师',
         component: () => import('@/views/edu/teacher/saveOrUpdateTeacher'),
         meta: { title: '添加讲师', icon: 'tree' }
