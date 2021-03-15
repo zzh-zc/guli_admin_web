@@ -72,6 +72,7 @@ export default {
           message: response.message
         });
         //跳转到课程分类列表
+        this.$router.push({ path: '/subject/listSubject'})
       }
     },
 
