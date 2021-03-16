@@ -2,7 +2,13 @@ import request from "@/utils/request"
 
 const api_name = '/eduservice/edu-teacher'
 export default{
-
+    getList(){
+      return request({
+        url:`${api_name}/findAll`,
+        method:'get',
+        //data表示吧teacherQuery转换成json传递
+      })
+    },
     getTeacherListPage(pageNum,pageSize,teacherQuery){
         return request({
             url:`${api_name}/pageTeacherCondition/${pageNum}/${pageSize}`,
