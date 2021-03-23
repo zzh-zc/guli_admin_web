@@ -101,29 +101,53 @@ export default {
         description: '',
         cover: process.env.OSS_PATH + '/cover/default.jpg',
         price: 0
-      }
+      },
+      BASE_API:process.env.BASE_API,
+      courseId:'',
     }
   },
   watch: {
-    $route(to, from) {
-      console.log('watch $route')
-      this.init()
-    }
+    // $route(to, from) {
+    //   console.log('watch $route')
+    //   this.init()
+    // }
   },
   created() {
     console.log('info created')
-    this.init();
-    this.initSubjectList();
-    this.initTeacherList();
+    if (this.$route.params && this.$route.params.id) {
+      this.courseId =  this.$route.params.id
+      this.getCourseInfoById(this.courseId);
+    }else{
+      // this.init();
+      this.initSubjectList();
+      this.initTeacherList();
+    }
   },
 
   methods: {
-    init() {
-      if (this.$route.params && this.$route.params.id) {
-        const id = this.$route.params.id
-        console.log(id)
-      }
+    getCourseInfoById(courseId) {
+      course.getCourseInfoById(courseId).then(res =>{
+        if(res.code === 20000){
+          this.courseInfo = res.data.item;
+          subject.getNestedTreeList().then(response => {
+            this.subjectNestedList = response.data.items
+            for (let i = 0; i < this.subjectNestedList.length; i++) {
+              if (this.subjectNestedList[i].id === this.courseInfo.subjectParentId) {
+                this.subSubjectList = this.subjectNestedList[i].children
+              }
+            }
+          })
+          // 获取讲师列表
+          this.initTeacherList()
+        }
+      })
     },
+    // init() {
+    //   if (this.$route.params && this.$route.params.id) {
+    //     const id = this.$route.params.id
+    //     console.log(id)
+    //   }
+    // },
     initSubjectList() {
       subject.getNestedTreeList().then(response => {
         this.subjectNestedList = response.data.items
@@ -173,7 +197,21 @@ export default {
     },
 
     updateData(val) {
-      this.$router.push({ path: '/edu/course/chapter/'+val })
+      this.saveBtnDisabled = true
+      course.updateCourseInfo(this.courseInfo).then(response => {
+        this.$message({
+          type: 'success',
+          message: '修改成功!'
+        })
+        return response// 将响应结果传递给then
+      }).then(response => {
+        this.$router.push({ path: '/edu/course/chapter/' + response.data.courseId })
+      }).catch((response) => {
+        this.$message({
+          type: 'error',
+          message: '保存失败'
+        })
+      })
     },
     handleAvatarSuccess(res, file) {
       console.log(res)// 上传响应
